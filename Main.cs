@@ -30,6 +30,9 @@ public class Main : Node
         GetNode<HUD>("HUD").ShowGameOver();
 
         GetTree().CallGroup("mobs", "queue_free");
+        
+        GetNode<AudioStreamPlayer>("Music").Stop();
+        GetNode<AudioStreamPlayer>("DeathSound").Play();
     }
 
     public void NewGame()
@@ -45,6 +48,7 @@ public class Main : Node
         player.Start(startPosition);
 
         GetNode<Timer>("StartTimer").Start();
+        GetNode<AudioStreamPlayer>("Music").Play();
     }
 
     public void OnStartTimerTimeout()
