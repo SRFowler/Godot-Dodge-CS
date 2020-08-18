@@ -14,7 +14,7 @@ public class Main : Node
 
     public override void _Ready()
     {
-        NewGame();
+        
     }
 
     private float RandRange(float min, float max)
@@ -28,6 +28,8 @@ public class Main : Node
         GetNode<Timer>("ScoreTimer").Stop();
 
         GetNode<HUD>("HUD").ShowGameOver();
+
+        GetTree().CallGroup("mobs", "queue_free");
     }
 
     public void NewGame()

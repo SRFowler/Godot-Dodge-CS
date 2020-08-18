@@ -71,7 +71,7 @@ public class Player : Area2D
 		Hide(); // Player disapears after being hit
 		EmitSignal("Hit");
 		// Only get hit once by disabling the collision shape
-		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("Disabled", true);
+		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
 	}
 
 }
