@@ -3,6 +3,10 @@ using System;
 
 public class Player : Area2D
 {
+
+	[Signal]
+	public delegate void Hit();
+
 	[Export]
 	public int Speed = 400; // How fast the player will move (pixels/sec).
 
@@ -11,6 +15,7 @@ public class Player : Area2D
 	public override void _Ready()
 	{
 		_screenSize = GetViewport().Size;
+		Hide(); // No player at the start
 	}
 
 
@@ -53,4 +58,13 @@ public class Player : Area2D
 			y: Mathf.Clamp(Position.y, 0, _screenSize.y)
 		);
 	}
+
+    private void OnPlayerBodyEntered(PhysicsBody2D body)
+    {
+        Hide(); // Player disapears after being hit
+        EmitSignal("Hit");
+        // Only get hit once by disabling the collision shape
+        GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("Disabled", true);
+    }
+
 }
