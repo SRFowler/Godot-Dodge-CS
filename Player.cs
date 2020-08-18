@@ -59,6 +59,13 @@ public class Player : Area2D
 		);
 	}
 
+    public void Start(Vector2 pos)
+    {
+        Position = pos;
+        Show();
+        GetNode<CollisionShape2D>("CollisionShape2D").Disabled = false;
+    }
+
     private void OnPlayerBodyEntered(PhysicsBody2D body)
     {
         Hide(); // Player disapears after being hit
