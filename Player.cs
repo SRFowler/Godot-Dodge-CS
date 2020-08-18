@@ -3,40 +3,54 @@ using System;
 
 public class Player : Area2D
 {
-    [Export]
-    public int Speed = 400; // How fast the player will move (pixels/sec).
+	[Export]
+	public int Speed = 400; // How fast the player will move (pixels/sec).
 
-    private Vector2 _screenSize; // Size of the game window.
+	private Vector2 _screenSize; // Size of the game window.
 
-    public override void _Ready()
-    {
-        _screenSize = GetViewport().Size;
-    }
+	public override void _Ready()
+	{
+		_screenSize = GetViewport().Size;
+	}
 
 
-    public override void _Process(float delta)
-    {
-        var velocity = new Vector2(); // The player's movement vector.
+	public override void _Process(float delta)
+	{
+		var velocity = new Vector2(); // The player's movement vector.
+		var animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite"); // Refernce to Node
 
-        velocity.x = Input.GetActionStrength("ui_right") - Input.GetActionStrength("ui_left");
-        velocity.y = Input.GetActionStrength("ui_down") - Input.GetActionStrength("ui_up");
+		// Get input and adjust velocity based on that
+		velocity.x = Input.GetActionStrength("ui_right") - Input.GetActionStrength("ui_left");
+		velocity.y = Input.GetActionStrength("ui_down") - Input.GetActionStrength("ui_up");
 
-        var animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
+		// To animate or not to animate
+		if (velocity.Length() > 0)
+		{
+			velocity = velocity.Normalized() * Speed;
+			animatedSprite.Play();
+		}
+		else
+		{
+			animatedSprite.Stop();
+		}
 
-        if (velocity.Length() > 0)
-        {
-            velocity = velocity.Normalized() * Speed;
-            animatedSprite.Play();
-        }
-        else
-        {
-            animatedSprite.Stop();
-        }
+		// Selecting the animation and flipping the sprite based on movement
+		if (velocity.x != 0)
+		{
+			animatedSprite.Animation = "walk";
+			animatedSprite.FlipH = velocity.x < 0;
+		}
+		else if (velocity.y != 0)
+		{
+			animatedSprite.Animation = "up";
+			animatedSprite.FlipV = velocity.y > 0;
+		}
 
-        Position += velocity * delta;
-        Position = new Vector2(
-            x: Mathf.Clamp(Position.x, 0, _screenSize.x),
-            y: Mathf.Clamp(Position.y, 0, _screenSize.y)
-        );
-    }
+		// Moving the player
+		Position += velocity * delta;
+		Position = new Vector2(
+			x: Mathf.Clamp(Position.x, 0, _screenSize.x),
+			y: Mathf.Clamp(Position.y, 0, _screenSize.y)
+		);
+	}
 }
