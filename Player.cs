@@ -18,29 +18,8 @@ public class Player : Area2D
     {
         var velocity = new Vector2(); // The player's movement vector.
 
-        /////
-        //  TODO: Fix all of this. Use Input.get_action_strength()
-        //  or whatever the C# implementation is
-        /////
-        if (Input.IsActionPressed("ui_right"))
-        {
-            velocity.x += 1;
-        }
-
-        if (Input.IsActionPressed("ui_left"))
-        {
-            velocity.x -= 1;
-        }
-
-        if (Input.IsActionPressed("ui_down"))
-        {
-            velocity.y += 1;
-        }
-
-        if (Input.IsActionPressed("ui_up"))
-        {
-            velocity.y -= 1;
-        }
+        velocity.x = Input.GetActionStrength("ui_right") - Input.GetActionStrength("ui_left");
+        velocity.y = Input.GetActionStrength("ui_down") - Input.GetActionStrength("ui_up");
 
         var animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
 
